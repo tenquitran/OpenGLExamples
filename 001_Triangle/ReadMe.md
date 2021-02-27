@@ -10,4 +10,4 @@ Also, uses a home-made library OglLib.
 
 Created: December 24, 2020
 
-![screenshot](/screenshots/screenshot.png)
+![screenshot](/001_Triangle/screenshots/screenshot.png)
