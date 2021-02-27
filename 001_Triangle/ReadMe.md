@@ -6,7 +6,7 @@ Uses the following third-party libraries:
 - GLFW (https://www.glfw.org/)
 - GLM (https://github.com/g-truc/glm)
 
-Also, uses a home-made library OglLib.
+Also, uses a home-made static library OglLib.
 
 Created: December 24, 2020
 

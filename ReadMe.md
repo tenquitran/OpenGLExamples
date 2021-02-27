@@ -28,7 +28,7 @@ Uses the following third-party libraries:
 - GLM (https://github.com/g-truc/glm)
 <...>
 
-Also, uses a home-made library OglLib.
+Also, uses a home-made static library OglLib.
 
 Created: <month> <date>, <year>
 
