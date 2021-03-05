@@ -10,10 +10,12 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "001_Triangle", "001_Triangl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B06374C1-A41A-49AB-802E-65A0A34B36E6}"
 	ProjectSection(SolutionItems) = preProject
-		ReadMe.txt = ReadMe.txt
+		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OglLib", "..\OglLib\OglLib\OglLib.vcxproj", "{357F7F6F-37B7-4377-BB74-360473C9F373}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "002_IndexBuffer", "002_IndexBuffer\002_IndexBuffer.vcxproj", "{E6778B44-1E6B-43E3-8610-0DF2238C7529}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,14 @@ Global
 		{357F7F6F-37B7-4377-BB74-360473C9F373}.Release|x64.Build.0 = Release|x64
 		{357F7F6F-37B7-4377-BB74-360473C9F373}.Release|x86.ActiveCfg = Release|Win32
 		{357F7F6F-37B7-4377-BB74-360473C9F373}.Release|x86.Build.0 = Release|Win32
+		{E6778B44-1E6B-43E3-8610-0DF2238C7529}.Debug|x64.ActiveCfg = Debug|x64
+		{E6778B44-1E6B-43E3-8610-0DF2238C7529}.Debug|x64.Build.0 = Debug|x64
+		{E6778B44-1E6B-43E3-8610-0DF2238C7529}.Debug|x86.ActiveCfg = Debug|Win32
+		{E6778B44-1E6B-43E3-8610-0DF2238C7529}.Debug|x86.Build.0 = Debug|Win32
+		{E6778B44-1E6B-43E3-8610-0DF2238C7529}.Release|x64.ActiveCfg = Release|x64
+		{E6778B44-1E6B-43E3-8610-0DF2238C7529}.Release|x64.Build.0 = Release|x64
+		{E6778B44-1E6B-43E3-8610-0DF2238C7529}.Release|x86.ActiveCfg = Release|Win32
+		{E6778B44-1E6B-43E3-8610-0DF2238C7529}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
