@@ -57,6 +57,10 @@ bool Scene::initialize()
 
     m_programId = m_program.getProgram();
 
+    glm::vec3 cameraPosition = { 0.0f, 0.0f, -2.0f };
+
+    m_spCamera = std::make_unique<CameraFps>(cameraPosition);
+
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
@@ -82,8 +86,6 @@ bool Scene::initialize()
         origin.x + HalfSide, origin.y - HalfSide, origin.z - HalfSide,
         origin.x - HalfSide, origin.y + HalfSide, origin.z - HalfSide,
         origin.x + HalfSide, origin.y + HalfSide, origin.z - HalfSide };
-
-    m_vertexCount = static_cast<GLsizei>(vertices.size() / 3);
 
     glGenBuffers(1, &m_vbo);
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
@@ -142,12 +144,44 @@ bool Scene::initialize()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
+    m_unMvp = glGetUniformLocation(m_programId, "mvp");
+    if (-1 == m_unMvp)
+    {
+        std::cerr << "Failed to get uniform location: mvp\n";
+        ATLASSERT(FALSE); return false;
+    }
+
     return true;
+}
+
+void Scene::translateCamera(const glm::vec3& diff)
+{
+    m_spCamera->translate(diff);
+}
+
+void Scene::rotateCamera(const glm::vec3& degrees)
+{
+    m_spCamera->rotate(degrees);
+}
+
+void Scene::updateMvpMatrix() const
+{
+    ATLASSERT(-1 != m_unMvp);
+
+    glUseProgram(m_programId);
+
+    glm::mat4 mvp = m_spCamera->getModelViewProjectionMatrix();
+
+    glUniformMatrix4fv(m_unMvp, 1, GL_FALSE, glm::value_ptr(mvp));
+
+    glUseProgram(0);
 }
 
 void Scene::render() const
 {
     ATLASSERT(m_programId);
+
+    updateMvpMatrix();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

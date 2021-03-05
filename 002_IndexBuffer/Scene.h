@@ -14,6 +14,17 @@ namespace TriangleApp
 
 		void render() const;
 
+		void translateCamera(const glm::vec3& diff);
+
+		void rotateCamera(const glm::vec3& degrees);
+
+	private:
+		Scene(const Scene&) = delete;
+		Scene& operator=(const Scene&) = delete;
+
+		// Update the Model-View-Projection (MVP) matrix.
+		void updateMvpMatrix() const;
+
 	private:
 		// GLSL program.
 		OglLib::ProgramGLSL m_program;
@@ -23,7 +34,7 @@ namespace TriangleApp
 
 		GLuint m_vao = {};
 
-		// Vertext buffer.
+		// Vertex buffer.
 		GLuint m_vbo = {};
 
 		// Index buffer.
@@ -35,6 +46,9 @@ namespace TriangleApp
 		// Colour buffer.
 		GLuint m_color = {};
 
-		GLsizei m_vertexCount = {};
+		std::unique_ptr<OglLib::CameraFps> m_spCamera;
+
+		// MVP matrix uniform.
+		GLint m_unMvp = { -1 };
 	};
 }

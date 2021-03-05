@@ -11,7 +11,7 @@ using namespace TriangleApp;
 const int WndWidth = 400;
 const int WndHeight = 300;
 
-void processInput(GLFWwindow* window);
+void processInput(GLFWwindow* window, Scene& scene);
 void resizeCallback(GLFWwindow* window, int width, int height);
 
 //////////////////////////////////////////////////////////////////////////
@@ -24,10 +24,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	UNREFERENCED_PARAMETER(lpCmdLine);
 	UNREFERENCED_PARAMETER(nCmdShow);
 
-	// Redirect std::wcout and std::wcerr output to the log file.
-	std::wofstream out("log.txt");
-	std::wcout.rdbuf(out.rdbuf());
-	std::wcerr.rdbuf(out.rdbuf());
+	// Redirect std::cout and std::cerr output to the log file.
+	std::ofstream out("log.txt");
+	std::cout.rdbuf(out.rdbuf());
+	std::cerr.rdbuf(out.rdbuf());
 
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -69,7 +69,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	// Rendering loop.
 	while (!glfwWindowShouldClose(pWindow))
 	{
-		processInput(pWindow);
+		processInput(pWindow, scene);
 
 		glClearColor(0.0f, 0.64f, 0.91f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -85,11 +85,31 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	return 0;
 }
 
-void processInput(GLFWwindow* pWindow)
+void processInput(GLFWwindow* pWindow, Scene& scene)
 {
 	if (GLFW_PRESS == glfwGetKey(pWindow, GLFW_KEY_ESCAPE))
 	{
 		glfwSetWindowShouldClose(pWindow, true);
+	}
+	
+	if (GLFW_PRESS == glfwGetKey(pWindow, GLFW_KEY_RIGHT))
+	{
+		scene.rotateCamera(glm::vec3(0.0f, 2.0f, 0.0f));
+	}
+	
+	if (GLFW_PRESS == glfwGetKey(pWindow, GLFW_KEY_LEFT))
+	{
+		scene.rotateCamera(glm::vec3(0.0f, -2.0f, 0.0f));
+	}
+	
+	if (GLFW_PRESS == glfwGetKey(pWindow, GLFW_KEY_UP))
+	{
+		scene.rotateCamera(glm::vec3(2.0f, 0.0f, 0.0f));
+	}
+	
+	if (GLFW_PRESS == glfwGetKey(pWindow, GLFW_KEY_DOWN))
+	{
+		scene.rotateCamera(glm::vec3(-2.0f, 0.0f, 0.0f));
 	}
 }
 

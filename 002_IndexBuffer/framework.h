@@ -31,6 +31,7 @@
 #define GLM_FORCE_RADIANS    // enforce all angles to be in radians, not in degrees
 #include <glm/glm.hpp>       // the most common GLM headers
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>    // value_ptr
 
 
 // WGL (Windows OpenGL).

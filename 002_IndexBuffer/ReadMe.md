@@ -8,6 +8,10 @@ Uses the following third-party libraries:
 
 Also, uses a home-made static library OglLib.
 
+Controls:
+- arrow keys: rotate camera horizontally or vertically
+- Escape: exit application
+
 Created: March 5, 2021
 
 ![screenshot](/002_IndexBuffer/screenshots/screenshot.png)
