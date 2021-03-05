@@ -1,5 +1,5 @@
 # 002_IndexBuffer
-Renders a rectangular cuboid using an index buffer.
+Renders a rectangular cuboid using an index buffer. Uses a camera.
 
 Uses the following third-party libraries:
 - GLEW (http://glew.sourceforge.net/)
