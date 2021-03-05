@@ -1,10 +1,13 @@
 #include "framework.h"
 #include "Scene.h"
+// stb library.
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 //////////////////////////////////////////////////////////////////////////
 
 using namespace OglLib;
-using namespace IndexBufferApp;
+using namespace TextureApp;
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -27,6 +30,17 @@ Scene::~Scene()
     if (0 != m_color)
     {
         glDeleteBuffers(1, &m_color);
+    }
+
+    if (0 != m_texCoord)
+    {
+        glDeleteBuffers(1, &m_texCoord);
+    }
+
+    if (0 != m_texture)
+    {
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glDeleteTextures(1, &m_texture);
     }
 
     if (0 != m_vao)
@@ -151,6 +165,109 @@ bool Scene::initialize()
         ATLASSERT(FALSE); return false;
     }
 
+    if (!setupTexture())
+    {
+        std::cerr << "Failed to set up texture\n";
+        ATLASSERT(FALSE); return false;
+    }
+
+    return true;
+}
+
+bool Scene::setupTexture()
+{
+    // Generate texture ID and bind it.
+
+    glGenTextures(1, &m_texture);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+
+    // Set the texture wrapping/filtering options.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Load data from the texture file.
+
+    int width, height;
+    int channels;    // number of color channels
+
+    std::string fileName = "media/brick.jpg";
+
+    unsigned char *pData = stbi_load(fileName.c_str(), &width, &height, &channels, 0);
+
+    if (!pData)
+    {
+        std::cerr << "Failed to load texture \"" << fileName << "\"\n";
+        ATLASSERT(FALSE); return false;
+    }
+
+    // Specify a 2D texture image. This will allow the shaders to read the texture data.
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, pData);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    stbi_image_free(pData);
+
+    // Create and fill the texture coordinates buffer and set up the corresponding vertex attribute.
+
+    glGenBuffers(1, &m_texCoord);
+    glBindBuffer(GL_ARRAY_BUFFER, m_texCoord);
+
+    std::vector<float> texCoords = {
+        // front
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        // back
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        // right
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        // left
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        // top
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        // bottom
+        0.0f, 0.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
+        0.0f, 1.0f };
+
+    glBufferData(GL_ARRAY_BUFFER, texCoords.size() * sizeof(texCoords[0]), &texCoords[0], GL_STATIC_DRAW);
+
+    // The second argument is the number of components (2 for texture coordinates).
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
+
+    glEnableVertexAttribArray(2);
+
+    // For each texture sampler uniform, tell OpenGL to which texture unit it belongs to using glUniform1i().
+
+    m_texSampler = glGetUniformLocation(m_programId, "ourTexture");
+
+    if (-1 == m_texSampler)
+    {
+        std::cerr << "Failed to get texture sampler: ourTex\n";
+        ATLASSERT(FALSE); return false;
+    }
+
+    glUseProgram(m_programId);
+
+    glUniform1i(m_texSampler, 0);
+
+    glUseProgram(0);
+
     return true;
 }
 
@@ -190,7 +307,13 @@ void Scene::render() const
     glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_index);
 
+    // Activate texture unit zero and bind our texture to it (see Note 1 below).
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+
     glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);

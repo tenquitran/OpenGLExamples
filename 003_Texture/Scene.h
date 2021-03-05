@@ -1,7 +1,7 @@
 #pragma once
 
 
-namespace IndexBufferApp
+namespace TextureApp
 {
 	class Scene
 	{
@@ -24,6 +24,8 @@ namespace IndexBufferApp
 
 		// Update the Model-View-Projection (MVP) matrix.
 		void updateMvpMatrix() const;
+
+		bool setupTexture();
 
 	private:
 		// GLSL program.
@@ -50,5 +52,13 @@ namespace IndexBufferApp
 
 		// MVP matrix uniform.
 		GLint m_unMvp = { -1 };
+
+		// Texture coordinate buffer.
+		GLuint m_texCoord = {};
+
+		GLuint m_texture = {};
+
+		// Texture sampler.
+		GLint m_texSampler = {};
 	};
 }
